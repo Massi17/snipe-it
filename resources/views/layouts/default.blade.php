@@ -460,6 +460,12 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </a>
                             </li>
                         @endcan
+                        <li{!! (request()->is('test') ? ' class="active"' : '') !!}>
+                            <a href="{{ route('custom.test') }}">
+                                <x-icon type="files" class="fa-fw" />
+                                <span>Test</span>
+                            </a>
+                        </li>
                         @can('index', \App\Models\Asset::class)
                             <li class="treeview{{ ((request()->is('statuslabels/*') || request()->is('hardware*')) ? ' active' : '') }}">
                                 <a href="#">
