@@ -31,8 +31,14 @@ use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('test', TestPageController::class)
+    Route::get('test', [TestPageController::class, 'index'])
         ->name('custom.test');
+
+    Route::post('test/intune-sync', [TestPageController::class, 'sync'])
+        ->name('custom.test.sync');
+
+    Route::post('test/intune-sync/apply', [TestPageController::class, 'applySelection'])
+        ->name('custom.test.apply');
 
     /*
     * Companies
