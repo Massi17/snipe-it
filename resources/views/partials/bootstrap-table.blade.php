@@ -14,6 +14,79 @@
     $(function () {
 
 
+        if ($.fn.bootstrapTable && ($.fn.bootstrapTable.Constructor || $.BootstrapTable)) {
+            var BootstrapTableCtor = $.fn.bootstrapTable.Constructor || $.BootstrapTable;
+
+            if (BootstrapTableCtor && BootstrapTableCtor.prototype && !BootstrapTableCtor.prototype._advancedSearchExpanded) {
+                var originalCreateToolbarForm = BootstrapTableCtor.prototype.createToolbarForm;
+
+                BootstrapTableCtor.prototype.createToolbarForm = function () {
+                    var originalFormHtml = originalCreateToolbarForm.apply(this, arguments);
+
+                    if (!originalFormHtml) {
+                        return originalFormHtml;
+                    }
+
+                    var $formWrapper = $('<div></div>').append(originalFormHtml);
+                    var $form = $formWrapper.find('form');
+
+                    if (!$form.length) {
+                        return originalFormHtml;
+                    }
+
+                    var knownFields = {};
+                    $form.find('input[name]').each(function () {
+                        var name = $(this).attr('name');
+                        if (name) {
+                            knownFields[name] = true;
+                        }
+                    });
+
+                    for (var i = 0; i < this.columns.length; i++) {
+                        var column = this.columns[i];
+
+                        if (!column || column.checkbox || !column.searchable || !column.field) {
+                            continue;
+                        }
+
+                        if (knownFields[column.field]) {
+                            continue;
+                        }
+
+                        var rawTitle = column.title || '';
+                        var title = $.trim($('<div></div>').html(rawTitle).text());
+
+                        if (!title) {
+                            continue;
+                        }
+
+                        var value = this.filterColumnsPartial[column.field] || '';
+                        var groupClasses = $.trim('form-group row ' + (this.constants.classes.formGroup || ''));
+                        var inputClasses = $.trim('form-control ' + (this.constants.classes.input || ''));
+
+                        var $group = $('<div></div>').addClass(groupClasses);
+                        var $label = $('<label></label>').addClass('col-sm-4 control-label').text(title);
+                        var $inputWrapper = $('<div></div>').addClass('col-sm-6');
+                        var $input = $('<input type="text" />')
+                            .addClass(inputClasses)
+                            .attr('name', column.field)
+                            .attr('placeholder', title)
+                            .val(value);
+
+                        $inputWrapper.append($input);
+                        $group.append($label).append($inputWrapper);
+                        $form.append($group);
+                        knownFields[column.field] = true;
+                    }
+
+                    return $formWrapper.html();
+                };
+
+                BootstrapTableCtor.prototype._advancedSearchExpanded = true;
+            }
+        }
+
+
         var blockedFields = "searchable,sortable,switchable,title,visible,formatter,class".split(",");
 
         var keyBlocked = function(key) {
