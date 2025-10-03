@@ -85,6 +85,37 @@
 
                         <div class="form-group">
                             <div class="col-md-offset-3 col-md-6">
+                                <hr>
+                                <h4 style="margin-top: 0;">Mappatura colonne asset</h4>
+                                <p class="text-muted" style="margin-bottom: 20px;">
+                                    Associa ogni colonna degli asset di Snipe-IT al campo corrispondente di Intune da utilizzare durante la sincronizzazione.
+                                </p>
+                            </div>
+                        </div>
+
+                        @foreach ($assetColumns as $column => $label)
+                            @php($fieldError = $errors->has("asset_column_map.$column"))
+                            <div class="form-group {{ $fieldError ? 'has-error' : '' }}">
+                                <label class="col-md-3 control-label">{{ $label }}</label>
+                                <div class="col-md-6">
+                                    <select name="asset_column_map[{{ $column }}]" class="form-control">
+                                        <option value="">— Nessun campo —</option>
+                                        @foreach ($intuneColumns as $intuneKey => $intuneLabel)
+                                            <option value="{{ $intuneKey }}" @selected(old("asset_column_map.$column", $settings['asset_column_map'][$column] ?? '') === $intuneKey)>
+                                                {{ $intuneLabel }} ({{ $intuneKey }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @if ($fieldError)
+                                        <span class="help-block">{{ $errors->first("asset_column_map.$column") }}</span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-6">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-save"></i> Salva impostazioni
                                 </button>

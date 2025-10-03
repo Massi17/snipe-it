@@ -7,6 +7,7 @@ use App\Support\IntuneSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TestPageController extends Controller
 {
@@ -69,6 +70,8 @@ class TestPageController extends Controller
     {
         return view('custom.test-settings', [
             'settings' => IntuneSettings::get(),
+            'assetColumns' => IntuneSettings::assetColumnLabels(),
+            'intuneColumns' => IntuneSettings::intuneColumnOptions(),
         ]);
     }
 
@@ -77,12 +80,22 @@ class TestPageController extends Controller
      */
     public function updateSettings(Request $request): RedirectResponse
     {
+        $assetColumns = IntuneSettings::assetColumnLabels();
+        $intuneColumns = IntuneSettings::intuneColumnOptions();
+
         $validated = $request->validate([
             'tenant_domain' => ['required', 'string', 'max:255'],
             'application_id' => ['nullable', 'string', 'max:255'],
             'client_secret' => ['nullable', 'string', 'max:255'],
             'device_filter' => ['nullable', 'string', 'max:255'],
+            'asset_column_map' => ['required', 'array'],
+            'asset_column_map.*' => ['nullable', 'string', Rule::in(array_keys($intuneColumns))],
         ]);
+
+        $validated['asset_column_map'] = collect($validated['asset_column_map'] ?? [])
+            ->only(array_keys($assetColumns))
+            ->map(fn ($value) => $value ?: null)
+            ->toArray();
 
         IntuneSettings::update($validated);
 
