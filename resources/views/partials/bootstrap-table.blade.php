@@ -1,5 +1,17 @@
 @push('css')
     <link rel="stylesheet" href="{{ url(mix('css/dist/bootstrap-table.css')) }}">
+    <style>
+        .bootstrap-table-filter-row th {
+            background-color: #f9f9f9;
+            vertical-align: middle;
+        }
+
+        .bootstrap-table-filter-row .form-control {
+            height: 34px;
+            padding: 6px 8px;
+            font-size: 13px;
+        }
+    </style>
 @endpush
 
 @push('js')
@@ -98,7 +110,102 @@
             return false;
         }
 
-        $('.snipe-table').bootstrapTable('destroy').each(function () {
+        var parseColumnTitle = function(rawTitle) {
+            return $.trim($('<div></div>').html(rawTitle || '').text());
+        };
+
+        var applyColumnFilters = function($table, silent) {
+            $table.bootstrapTable('refresh', {
+                silent: silent === true
+            });
+        };
+
+        var scheduleFilterRefresh = function($table) {
+            var timer = $table.data('columnFilterTimer');
+            if (timer) {
+                clearTimeout(timer);
+            }
+
+            timer = setTimeout(function () {
+                applyColumnFilters($table, true);
+            }, 300);
+
+            $table.data('columnFilterTimer', timer);
+        };
+
+        var renderColumnFilters = function($table) {
+            if ($table.data('filter-control') !== true && $table.data('filter-control') !== 'true') {
+                return;
+            }
+
+            var $header = $table.find('thead');
+            if (!$header.length) {
+                return;
+            }
+
+            var filters = $table.data('columnFilters') || {};
+
+            var $filterRow = $header.find('tr.bootstrap-table-filter-row');
+            if (!$filterRow.length) {
+                $filterRow = $('<tr class="bootstrap-table-filter-row"></tr>');
+                $header.append($filterRow);
+            }
+
+            $filterRow.empty();
+
+            var columns = $table.bootstrapTable('getVisibleColumns');
+
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                var $cell = $('<th></th>');
+
+                if (column.checkbox || !column.field || column.searchable === false) {
+                    $filterRow.append($cell);
+                    continue;
+                }
+
+                if (!column.filterControl || column.filterControl === 'select' || column.filterControlVisible === false) {
+                    $filterRow.append($cell);
+                    continue;
+                }
+
+                var title = parseColumnTitle(column.title);
+                var $input = $('<input type="text" class="form-control" />')
+                    .attr('name', column.field)
+                    .attr('placeholder', title)
+                    .val(filters[column.field] || '');
+
+                $input.on('input change', function (event) {
+                    var $this = $(this);
+                    var value = $.trim($this.val());
+                    var field = $this.attr('name');
+                    var activeFilters = $table.data('columnFilters') || {};
+
+                    if (value) {
+                        activeFilters[field] = value;
+                    } else {
+                        delete activeFilters[field];
+                    }
+
+                    $table.data('columnFilters', activeFilters);
+                    if (event.type === 'input') {
+                        scheduleFilterRefresh($table);
+                    } else {
+                        applyColumnFilters($table, true);
+                    }
+                });
+
+                $cell.append($input);
+                $filterRow.append($cell);
+            }
+
+        };
+
+        var $tables = $('.snipe-table');
+
+        $tables.bootstrapTable('destroy');
+
+        $tables.each(function () {
 
             data_export_options = $(this).attr('data-export-options');
             export_options = data_export_options ? JSON.parse(data_export_options) : {};
@@ -152,6 +259,9 @@
                 cookieExpire: '2y',
                 search: data_with_default('search', true),
                 advancedSearch: data_with_default('advanced-search', true),
+                filterControl: data_with_default('filter-control', false),
+                filterControlVisible: data_with_default('filter-control-visible', true),
+                filterControlMultipleSearch: data_with_default('filter-control-multiple-search', false),
                 searchHighlight: data_with_default('search-highlight', true),
                 clickToSelect: data_with_default('click-to-select', true),
                 showPrint: data_with_default('show-print', true),
@@ -182,6 +292,10 @@
                         if (!keyBlocked(i)) { // only send the field if it's not in blockedFields
                             newParams[i] = params[i];
                         }
+                    }
+                    var filters = $(table).data('columnFilters') || {};
+                    if (Object.keys(filters).length > 0) {
+                        newParams.filter = JSON.stringify(filters);
                     }
                     return newParams;
                 },
@@ -239,7 +353,22 @@
             });
 
         });
-    });
+
+        $tables.on('post-header.bs.table', function () {
+            renderColumnFilters($(this));
+        });
+
+        $tables.on('reset-view.bs.table column-switch.bs.table page-change.bs.table load-success.bs.table', function () {
+            renderColumnFilters($(this));
+        });
+
+        $tables.each(function () {
+            var $table = $(this);
+            if ($table.data('filter-control') === true || $table.data('filter-control') === 'true') {
+                $table.data('columnFilters', {});
+                renderColumnFilters($table);
+            }
+        });
 
 
 

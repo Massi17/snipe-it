@@ -61,12 +61,13 @@
 
                                             @if ($category->category_type=='asset')
                                             data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                            data-show-columns-search="true"
-                                            data-cookie-id-table="categoryAssetsTable"
-                                            id="categoryAssetsTable"
-                                            data-buttons="assetButtons"
-                                            data-id-table="categoryAssetsTable"
-                                            data-toolbar="#assetsBulkEditToolbar"
+                                              data-show-columns-search="true"
+                                              data-cookie-id-table="categoryAssetsTable"
+                                              id="categoryAssetsTable"
+                                              data-buttons="assetButtons"
+                                              data-id-table="categoryAssetsTable"
+                                              data-filter-control="true"
+                                              data-toolbar="#assetsBulkEditToolbar"
                                             data-bulk-button-id="#bulkAssetEditButton"
                                             data-bulk-form-id="#assetsBulkForm"
                                             data-export-options='{

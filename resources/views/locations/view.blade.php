@@ -208,12 +208,13 @@
                   <h2 class="box-title">{{ trans('admin/locations/message.current_location') }}</h2>
 
                       @include('partials.asset-bulk-actions')
-                      <table
-                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                              data-show-columns-search="true"
-                              data-cookie-id-table="assetsListingTable"
-                              data-id-table="assetsListingTable"
-                              data-side-pagination="server"
+                        <table
+                                data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                data-show-columns-search="true"
+                                data-cookie-id-table="assetsListingTable"
+                                data-id-table="assetsListingTable"
+                                data-filter-control="true"
+                                data-side-pagination="server"
                               data-sort-order="asc"
                               data-toolbar="#assetsBulkEditToolbar"
                               data-bulk-button-id="#bulkAssetEditButton"
@@ -235,13 +236,14 @@
                   </h2>
 
                       @include('partials.asset-bulk-actions', ['id_divname' => 'AssignedAssetsBulkEditToolbar', 'id_formname' => 'assignedAssetsBulkForm', 'id_button' => 'AssignedbulkAssetEditButton'])
-                      <table
-                              role="table"
-                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                              data-show-columns-search="true"
-                              data-cookie-id-table="assetsAssignedListingTable"
-                              data-id-table="assetsAssignedListingTable"
-                              data-side-pagination="server"
+                        <table
+                                role="table"
+                                data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                data-show-columns-search="true"
+                                data-cookie-id-table="assetsAssignedListingTable"
+                                data-id-table="assetsAssignedListingTable"
+                                data-filter-control="true"
+                                data-side-pagination="server"
                               data-sort-order="asc"
                               data-toolbar="#AssignedAssetsBulkEditToolbar"
                               data-bulk-button-id="#AssignedbulkAssetEditButton"
@@ -261,13 +263,14 @@
                   <h2 class="box-title">{{ trans('admin/hardware/form.default_location') }}</h2>
 
                       @include('partials.asset-bulk-actions', ['id_divname' => 'RTDassetsBulkEditToolbar', 'id_formname' => 'RTDassets', 'id_button' => 'RTDbulkAssetEditButton'])
-                      <table
-                              role="table"
-                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                              data-show-columns-search="true"
-                              data-cookie-id-table="RTDassetsListingTable"
-                              data-id-table="RTDassetsListingTable"
-                              data-side-pagination="server"
+                        <table
+                                role="table"
+                                data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                data-show-columns-search="true"
+                                data-cookie-id-table="RTDassetsListingTable"
+                                data-id-table="RTDassetsListingTable"
+                                data-filter-control="true"
+                                data-side-pagination="server"
                               data-sort-order="asc"
                               data-toolbar="#RTDassetsBulkEditToolbar"
                               data-bulk-button-id="#RTDbulkAssetEditButton"
