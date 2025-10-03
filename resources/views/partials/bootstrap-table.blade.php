@@ -324,27 +324,47 @@
                     var lookup_initialized = false;
                     var ths = $('th');
                     ths.each(function (index, element) {
-                        th = $(element);
+                        var th = $(element);
                         //only populate the lookup table once; don't need to keep doing it.
                         if (!lookup_initialized) {
                             // th -> tr -> thead -> table
-                            var table = th.parent().parent().parent()
-                            var column_data = table.data('columns')
-                            for (var column in column_data) {
-                                lookup[column_data[column].field] = column_data[column].titleTooltip;
+                            var $table = th.parent().parent().parent();
+                            var column_data = $table.data('columns');
+
+                            if (!Array.isArray(column_data)) {
+                                var rawColumns = $table.attr('data-columns');
+
+                                if (rawColumns) {
+                                    try {
+                                        column_data = JSON.parse(rawColumns);
+                                    } catch (error) {
+                                        column_data = [];
+                                    }
+                                } else {
+                                    column_data = [];
+                                }
                             }
-                            lookup_initialized = true
+
+                            for (var columnIndex = 0; columnIndex < column_data.length; columnIndex++) {
+                                var column = column_data[columnIndex];
+
+                                if (column && column.field) {
+                                    lookup[column.field] = column.titleTooltip;
+                                }
+                            }
+
+                            lookup_initialized = true;
                         }
 
-                        field = th.data('field'); // find fieldname this column refers to
-                        title = lookup[field];
+                        var field = th.data('field'); // find fieldname this column refers to
+                        var title = lookup[field];
                         if (title) {
                             th.attr('data-toggle', 'tooltip');
                             th.attr('data-placement', 'top');
                             // th.attr('title', title) //this causes 'double-titles' which looks gross
                             th.tooltip({container: 'body', title: title});
                         }
-                    })
+                    });
                 },
                 formatNoMatches: function () {
                     return '{{ trans('table.no_matching_records') }}';
