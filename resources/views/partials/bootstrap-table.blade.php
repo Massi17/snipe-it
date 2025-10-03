@@ -493,29 +493,33 @@
 
     // This specifies the footer columns that should have special styles associated
     // (usually numbers)
-    window.footerStyle = column => ({
-        remaining: {
-            classes: 'text-padding-number-footer-cell'
-        },
-        qty: {
-            classes: 'text-padding-number-footer-cell',
-        },
-        purchase_cost: {
-            classes: 'text-padding-number-footer-cell'
-        },
-        checkouts_count: {
-            classes: 'text-padding-number-footer-cell'
-        },
-        assets_count: {
-            classes: 'text-padding-number-footer-cell'
-        },
-        seats: {
-            classes: 'text-padding-number-footer-cell'
-        },
-        free_seats_count: {
-            classes: 'text-padding-number-footer-cell'
-        },
-    }[column.field]);
+    window.footerStyle = function (column) {
+        var styles = {
+            remaining: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            qty: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            purchase_cost: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            checkouts_count: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            assets_count: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            seats: {
+                classes: 'text-padding-number-footer-cell'
+            },
+            free_seats_count: {
+                classes: 'text-padding-number-footer-cell'
+            }
+        };
+
+        return styles[column.field];
+    };
 
 
 
@@ -994,8 +998,8 @@
     }
 
     function prettyLog(str) {
-        let frags = str.split('_');
-        for (let i = 0; i < frags.length; i++) {
+        var frags = str.split('_');
+        for (var i = 0; i < frags.length; i++) {
             frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
         }
         return frags.join(' ');
@@ -1273,9 +1277,9 @@
     }
 
     // This handles the custom view for the filestable blade component gallery-card component
-    window.customViewFormatter = data => {
-        const template = $('#fileGalleryTemplate').html()
-        let view = ''
+    window.customViewFormatter = function (data) {
+        var template = $('#fileGalleryTemplate').html();
+        var view = '';
 
         $.each(data, function (i, row) {
 
@@ -1315,10 +1319,10 @@
                     '<a href="'+delete_url+'" class="delete-asset btn btn-danger btn-sm" data-icon="fa-trash" data-toggle="modal" data-content="{{ trans('general.file_upload_status.confirm_delete') }} '+ row.filename +'?" data-title="{{ trans('general.delete') }}" onClick="return false;" data-target="#dataConfirmModal"><x-icon type="delete" /><span class="sr-only">{{ trans('general.delete') }}</span></a>' :
                     '<a class="btn btn-sm btn-danger disabled" data-tooltip="true" title="{{ trans('general.file_upload_status.file_not_found') }}"><x-icon type="delete" /><span class="sr-only">{{ trans('general.delete') }}</span></a>'
                 );
-        })
+        });
 
-        return `<div class="row">${view}</div>`
-    }
+        return '<div class="row">' + view + '</div>';
+    };
 
 
 
@@ -1487,12 +1491,13 @@
 
 
     // User table buttons
-    window.userButtons = () => ({
+    window.userButtons = function () {
+        return {
         @can('create', \App\Models\User::class)
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('users.create') }}';
             },
             attributes: {
@@ -1508,7 +1513,7 @@
         btnExport: {
             text: '{{ trans('general.export') }}',
             icon: 'fa-solid fa-file-csv',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('users.export') }}';
             },
             attributes: {
@@ -1519,7 +1524,7 @@
         btnShowAdmins: {
             text: '{{ trans('general.show_admins') }}',
             icon: 'fa-solid fa-crown{{ (request()->input('admins') == "true") ? ' text-danger' : '' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('admins') == "true") ? route('users.index') : route('users.index', ['admins' => 'true']) }}';
             },
             attributes: {
@@ -1531,7 +1536,7 @@
         btnShowDeleted: {
             text: '{{ (request()->input('status') == "deleted") ?trans('admin/users/table.show_current') : trans('admin/users/table.show_deleted') }}',
             icon: 'fa-solid fa-trash {{ (request()->input('status') == "deleted") ? ' text-danger' : ' fa-user-trash' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "deleted") ? route('users.index') : route('users.index', ['status' => 'deleted']) }}';
             },
             attributes: {
@@ -1540,16 +1545,18 @@
             }
         },
 
-    }); // end user table buttons
+        };
+    }; // end user table buttons
 
 
     @can('create', \App\Models\Company::class)
     // Company table buttons
-    window.companyButtons = () => ({
+    window.companyButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('companies.create') }}';
             },
             attributes: {
@@ -1561,17 +1568,19 @@
             }
         },
 
-    }); // End company table buttons
+        };
+    }; // End company table buttons
     @endcan
 
 
     // Asset table buttons
-    window.assetButtons = () => ({
+    window.assetButtons = function () {
+        return {
         @can('create', \App\Models\Asset::class)
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('hardware.create') }}';
             },
             attributes: {
@@ -1588,7 +1597,7 @@
         btnAddMaintenance: {
             text: '{{ trans('button.add_maintenance') }}',
             icon: 'fa-solid fa-screwdriver-wrench',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('maintenances.create', ['asset_id' => (isset($asset)) ? $asset->id :'' ]) }}';
             },
             attributes: {
@@ -1601,7 +1610,7 @@
         btnExport: {
             text: '{{ trans('admin/hardware/general.custom_export') }}',
             icon: 'fa-solid fa-file-csv',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('reports/custom') }}';
             },
             attributes: {
@@ -1612,7 +1621,7 @@
         btnShowDeleted: {
             text: '{{ (request()->input('status') == "Deleted") ? trans('general.list_all') : trans('general.deleted') }}',
             icon: 'fa-solid fa-trash {{ (request()->input('status') == "Deleted") ? ' text-danger' : '' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "Deleted") ? route('hardware.index') : route('hardware.index', ['status' => 'Deleted']) }}';
             },
             attributes: {
@@ -1620,15 +1629,17 @@
             }
 
         },
-    });
+        };
+    };
 
     @can('create', \App\Models\Location::class)
     // Location table buttons
-    window.locationButtons = () => ({
+    window.locationButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('locations.create') }}';
             },
             attributes: {
@@ -1643,7 +1654,7 @@
         btnShowDeleted: {
             text: '{{ (request()->input('status') == "deleted") ? trans('admin/users/table.show_current') : trans('admin/users/table.show_deleted') }}',
             icon: 'fa-solid fa-trash {{ (request()->input('status') == "deleted") ? ' text-danger' : ' fa-user-trash' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "deleted") ? route('locations.index') : route('locations.index', ['status' => 'deleted']) }}';
             },
             attributes: {
@@ -1651,16 +1662,18 @@
 
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Accessory::class)
     // Accessory table buttons
-    window.accessoryButtons = () => ({
+    window.accessoryButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('accessories.create') }}';
             },
             attributes: {
@@ -1671,16 +1684,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Depreciation::class)
     // Accessory table buttons
-    window.depreciationButtons = () => ({
+    window.depreciationButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('depreciations.create') }}';
             },
             attributes: {
@@ -1691,16 +1706,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\CustomField::class)
     // Accessory table buttons
-    window.customFieldButtons = () => ({
+    window.customFieldButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('fields.create') }}';
             },
             attributes: {
@@ -1711,17 +1728,19 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
 
     @can('create', \App\Models\CustomFieldset::class)
     // Accessory table buttons
-    window.customFieldsetButtons = () => ({
+    window.customFieldsetButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('fieldsets.create') }}';
             },
             attributes: {
@@ -1732,16 +1751,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Component::class)
     // Compoment table buttons
-    window.componentButtons = () => ({
+    window.componentButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('components.create') }}';
             },
             attributes: {
@@ -1752,16 +1773,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Consumable::class)
     // Consumable table buttons
-    window.consumableButtons = () => ({
+    window.consumableButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('consumables.create') }}';
             },
             attributes: {
@@ -1772,16 +1795,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Manufacturer::class)
     // Consumable table buttons
-    window.manufacturerButtons = () => ({
+    window.manufacturerButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('manufacturers.create') }}';
             },
             attributes: {
@@ -1795,7 +1820,7 @@
         btnShowDeleted: {
             text: '{{ (request()->input('status') == "Deleted") ? trans('general.list_all') : trans('general.deleted') }}',
             icon: 'fa-solid fa-trash {{ (request()->input('status') == "deleted") ? ' text-danger' : '' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "deleted") ? route('manufacturers.index') : route('manufacturers.index', ['status' => 'deleted']) }}';
             },
             attributes: {
@@ -1803,16 +1828,18 @@
 
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Supplier::class)
     // Consumable table buttons
-    window.supplierButtons = () => ({
+    window.supplierButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('suppliers.create') }}';
             },
             attributes: {
@@ -1823,16 +1850,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Component::class)
     // License table buttons
-    window.licenseButtons = () => ({
+    window.licenseButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('licenses.create') }}';
             },
             attributes: {
@@ -1843,16 +1872,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Department::class)
     // Department table buttons
-    window.departmentButtons = () => ({
+    window.departmentButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('departments.create') }}';
             },
             attributes: {
@@ -1863,16 +1894,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\CustomField::class)
     // Custom Field table buttons
-    window.departmentButtons = () => ({
+    window.departmentButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('departments.create') }}';
             },
             attributes: {
@@ -1883,16 +1916,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('update', \App\Models\Asset::class)
     // Custom Field table buttons
-    window.maintenanceButtons = () => ({
+    window.maintenanceButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('maintenances.create', ['asset_id' => (isset($asset)) ? $asset->id :'' ]) }}';
             },
             attributes: {
@@ -1903,16 +1938,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Category::class)
     // Custom Field table buttons
-    window.categoryButtons = () => ({
+    window.categoryButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('categories.create') }}';
             },
             attributes: {
@@ -1923,16 +1960,18 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\AssetModel::class)
     // Custom Field table buttons
-    window.modelButtons = () => ({
+    window.modelButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('models.create') }}';
             },
             attributes: {
@@ -1946,7 +1985,7 @@
         btnShowDeleted: {
             text: '{{ (request()->input('status') == "deleted") ? trans('general.list_all') : trans('general.deleted') }}',
             icon: 'fa-solid fa-trash {{ (request()->input('status') == "deleted") ? ' text-danger' : '' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "deleted") ? route('models.index') : route('models.index', ['status' => 'deleted']) }}';
             },
             attributes: {
@@ -1954,16 +1993,18 @@
 
             }
         },
-    });
+        };
+    };
     @endcan
 
     @can('create', \App\Models\Statuslabel::class)
     // Status label table buttons
-    window.statuslabelButtons = () => ({
+    window.statuslabelButtons = function () {
+        return {
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('statuslabels.create') }}';
             },
             attributes: {
@@ -1974,17 +2015,19 @@
                 @endif
             }
         },
-    });
+        };
+    };
     @endcan
 
 
     // License table buttons
-    window.licenseButtons = () => ({
+    window.licenseButtons = function () {
+        return {
         @can('create', \App\Models\License::class)
         btnAdd: {
             text: '{{ trans('general.create') }}',
             icon: 'fa fa-plus',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('licenses.create') }}';
             },
             attributes: {
@@ -2000,7 +2043,7 @@
         btnExport: {
             text: '{{ trans('general.export') }}',
             icon: 'fa-solid fa-file-csv',
-            event () {
+            event: function () {
                 window.location.href = '{{ route('licenses.export', ['category_id' => (isset($category)) ? $category->id :'' ]) }}';
             },
             attributes: {
@@ -2011,7 +2054,7 @@
         btnShowInactive: {
             text: '{{ (request()->input('status') == "inactive") ? trans('general.list_all') : trans('general.show_inactive') }}',
             icon: 'fas fa-clock {{ (request()->input('status') == "inactive") ? ' text-danger' : '' }}',
-            event () {
+            event: function () {
                 window.location.href = '{{ (request()->input('status') == "inactive") ? route('licenses.index') : route('licenses.index', ['status' => 'inactive']) }}';
             },
             attributes: {
@@ -2019,7 +2062,8 @@
 
             }
         },
-    });
+        };
+    };
 
 
 
