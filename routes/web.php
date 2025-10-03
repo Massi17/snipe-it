@@ -40,6 +40,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('test/intune-sync/apply', [TestPageController::class, 'applySelection'])
         ->name('custom.test.apply');
 
+    Route::get('test/settings', [TestPageController::class, 'settings'])
+        ->name('custom.test.settings');
+
+    Route::post('test/settings', [TestPageController::class, 'updateSettings'])
+        ->name('custom.test.settings.update');
+
     /*
     * Companies
     */

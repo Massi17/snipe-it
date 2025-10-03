@@ -11,6 +11,11 @@ Test
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Test</h3>
+                <div class="box-tools pull-right">
+                    <a href="{{ route('custom.test.settings') }}" class="btn btn-default btn-sm">
+                        <i class="fa fa-cog"></i> Configura sincronizzazione Intune
+                    </a>
+                </div>
             </div>
             <div class="box-body">
                 @if (session('status'))
@@ -24,6 +29,16 @@ Test
                     <div class="alert alert-danger alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                         {{ $errors->first('intune') }}
+                    </div>
+                @endif
+
+                @if (! empty($intuneSettings['tenant_domain']) || ! empty($intuneSettings['device_filter']))
+                    <div class="alert alert-info" style="margin-bottom: 20px;">
+                        <strong>Configurazione corrente:</strong>
+                        <span>Dominio {{ $intuneSettings['tenant_domain'] ?: 'non impostato' }}</span>
+                        @if (! empty($intuneSettings['device_filter']))
+                            <span>· Filtro dispositivi: {{ $intuneSettings['device_filter'] }}</span>
+                        @endif
                     </div>
                 @endif
 
