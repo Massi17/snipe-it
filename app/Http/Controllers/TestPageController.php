@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\IntuneSyncService;
+use App\Support\IntuneSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class TestPageController extends Controller
         return view('custom.test', [
             'syncResults' => $request->session()->get('intune_sync_results'),
             'selectionSummary' => $request->session()->get('intune_sync_selection'),
+            'intuneSettings' => IntuneSettings::get(),
         ]);
     }
 
@@ -58,5 +60,34 @@ class TestPageController extends Controller
         ]);
 
         return redirect()->route('custom.test')->with('status', __('Selezione dispositivi salvata.'));
+    }
+
+    /**
+     * Show the configuration page for Intune synchronisation settings.
+     */
+    public function settings(): View
+    {
+        return view('custom.test-settings', [
+            'settings' => IntuneSettings::get(),
+        ]);
+    }
+
+    /**
+     * Persist the Intune synchronisation settings provided by the user.
+     */
+    public function updateSettings(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'tenant_domain' => ['required', 'string', 'max:255'],
+            'application_id' => ['nullable', 'string', 'max:255'],
+            'client_secret' => ['nullable', 'string', 'max:255'],
+            'device_filter' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        IntuneSettings::update($validated);
+
+        return redirect()
+            ->route('custom.test.settings')
+            ->with('status', __('Impostazioni Intune aggiornate con successo.'));
     }
 }
