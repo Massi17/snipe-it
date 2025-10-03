@@ -834,12 +834,13 @@
 
             <div class="table table-responsive">
 
-            <table
-                    data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                    data-show-columns-search="true"
-                    data-cookie-id-table="userAssetsListingTable"
-                    data-id-table="userAssetsListingTable"
-                    data-side-pagination="server"
+              <table
+                      data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                      data-show-columns-search="true"
+                      data-cookie-id-table="userAssetsListingTable"
+                      data-id-table="userAssetsListingTable"
+                      data-filter-control="true"
+                      data-side-pagination="server"
                     data-show-footer="true"
                     data-sort-name="name"
                     data-toolbar="#assetsBulkEditToolbar"

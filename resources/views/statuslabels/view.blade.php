@@ -18,6 +18,7 @@
                                         data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
                                         data-cookie-id-table="assetsListingTable"
                                         data-id-table="assetsListingTable"
+                                        data-filter-control="true"
                                         data-side-pagination="server"
                                         data-sort-order="asc"
                                         data-toolbar="#assetsBulkEditToolbar"

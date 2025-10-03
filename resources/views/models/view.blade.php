@@ -85,12 +85,13 @@
 
                     @include('partials.asset-bulk-actions')
 
-                    <table
-                            data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                            data-show-columns-search="true"
-                            data-cookie-id-table="assetListingTable"
-                            data-id-table="assetListingTable"
-                            data-side-pagination="server"
+                      <table
+                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                              data-show-columns-search="true"
+                              data-cookie-id-table="assetListingTable"
+                              data-id-table="assetListingTable"
+                              data-filter-control="true"
+                              data-side-pagination="server"
                             data-show-footer="true"
                             data-toolbar="#assetsBulkEditToolbar"
                             data-bulk-button-id="#bulkAssetEditButton"

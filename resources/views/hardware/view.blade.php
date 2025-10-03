@@ -1283,12 +1283,13 @@
                                         <!-- checked out assets table -->
                                         <div class="table-responsive">
 
-                                            <table
-                                                    data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                                    data-show-columns-search="true"
-                                                    data-cookie-id-table="assetsTable"
-                                                    data-id-table="assetsTable"
-                                                    data-side-pagination="server"
+                                              <table
+                                                      data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                                      data-show-columns-search="true"
+                                                      data-cookie-id-table="assetsTable"
+                                                      data-id-table="assetsTable"
+                                                      data-filter-control="true"
+                                                      data-side-pagination="server"
                                                     data-sort-order="asc"
                                                     data-toolbar="#assetsBulkEditToolbar"
                                                     data-bulk-button-id="#bulkAssetEditButton"

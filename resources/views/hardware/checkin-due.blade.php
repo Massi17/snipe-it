@@ -46,13 +46,14 @@
                         <div class="row">
                             <div class="table table-responsive">
                                 <div class="col-md-12">
-                                    <table
+                                      <table
 
-                                            data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                            data-show-columns-search="true"
-                                            data-cookie-id-table="dueAssetcheckinListing"
-                                            data-id-table="dueAssetcheckinListing"
-                                            data-side-pagination="server"
+                                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                              data-show-columns-search="true"
+                                              data-cookie-id-table="dueAssetcheckinListing"
+                                              data-id-table="dueAssetcheckinListing"
+                                              data-filter-control="true"
+                                              data-side-pagination="server"
                                             data-show-footer="true"
                                             data-sort-order="asc"
                                             data-sort-name="name"
@@ -83,12 +84,13 @@
                         <div class="row">
                             <div class="table table-responsive">
                                 <div class="col-md-12">
-                                    <table
+                                      <table
 
-                                            data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                            data-cookie-id-table="overdueAssetcheckinListing"
-                                            data-id-table="overdueAssetcheckinListing"
-                                            data-side-pagination="server"
+                                              data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                              data-cookie-id-table="overdueAssetcheckinListing"
+                                              data-id-table="overdueAssetcheckinListing"
+                                              data-filter-control="true"
+                                              data-side-pagination="server"
                                             data-show-footer="true"
                                             data-sort-order="asc"
                                             data-sort-name="name"

@@ -89,11 +89,12 @@
                         <div class="table table-responsive">
                             @include('partials.asset-bulk-actions')
 
-                            <table
-                                    data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                    data-cookie-id-table="assetsListingTable"
-                                    data-id-table="assetsListingTable"
-                                    data-side-pagination="server"
+                              <table
+                                      data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                      data-cookie-id-table="assetsListingTable"
+                                      data-id-table="assetsListingTable"
+                                      data-filter-control="true"
+                                      data-side-pagination="server"
                                     data-show-columns-search="true"
                                     data-sort-order="asc"
                                     data-toolbar="#assetsBulkEditToolbar"

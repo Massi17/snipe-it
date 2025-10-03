@@ -64,6 +64,7 @@
                 data-cookie-id-table="{{ request()->has('status') ? e(request()->input('status')) : ''  }}assetsListingTable"
                 data-id-table="{{ request()->has('status') ? e(request()->input('status')) : ''  }}assetsListingTable"
                 data-search-text="{{ e(Session::get('search')) }}"
+                data-filter-control="true"
                 data-side-pagination="server"
                 data-show-footer="true"
                 data-sort-order="asc"

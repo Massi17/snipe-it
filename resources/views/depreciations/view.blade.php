@@ -63,12 +63,13 @@
                                 'id_button' => 'assetEditButton'
                                 ])
 
-                        <table
-                                data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                                data-show-columns-search="true"
-                                data-cookie-id-table="depreciationsAssetTable"
-                                data-id-table="depreciationsAssetTable"
-                                id="depreciationsAssetTable"
+                          <table
+                                  data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                                  data-show-columns-search="true"
+                                  data-cookie-id-table="depreciationsAssetTable"
+                                  data-id-table="depreciationsAssetTable"
+                                  data-filter-control="true"
+                                  id="depreciationsAssetTable"
                                 data-side-pagination="server"
                                 data-sort-order="asc"
                                 data-sort-name="name"
