@@ -536,20 +536,27 @@
 
 
     // This is a special formatter that will indicate whether a user is an admin or superadmin
+    const usernameRoleLinkFormatterTranslations = {
+        superuserTooltip: @json(trans('general.superuser_tooltip')),
+        superuserTitle: @json(trans('general.superuser')),
+        adminTooltip: @json(trans('general.admin_tooltip')),
+        adminTitle: @json(trans('general.admin_user')),
+        userUrl: @json(config('app.url').'/users/')
+    };
+
     function usernameRoleLinkFormatter(value, row) {
+        if ((value) && (row)) {
+            const userLink = `${usernameRoleLinkFormatterTranslations.userUrl}${row.id}`;
 
-            if ((value) && (row)) {
-
-                if (row.role === 'superadmin') {
-                    return '<span style="white-space: nowrap" data-tooltip="true" title="{{ trans('general.superuser_tooltip') }}"><x-icon type="superadmin" title="{{ trans('general.superuser') }}"  class="text-danger" /> <a href="{{ config('app.url') }}/users/' + row.id + '">' + value + '</a></span>';
-                } else if (row.role === 'admin') {
-                    return '<span style="white-space: nowrap" data-tooltip="true" title="{{ trans('general.admin_tooltip') }}"><x-icon type="superadmin" title="{{ trans('general.admin_user') }}" class="text-warning" /> <a href="{{ config('app.url') }}/users/' + row.id + '">' + value + '</a></span>';
-                }
-
-                // Regular user
-                return '<a href="{{ config('app.url') }}/users/' + row.id + '">' + value + '</a>';
+            if (row.role === 'superadmin') {
+                return `<span style="white-space: nowrap" data-tooltip="true" title="${usernameRoleLinkFormatterTranslations.superuserTooltip}"><x-icon type="superadmin" title="${usernameRoleLinkFormatterTranslations.superuserTitle}"  class="text-danger" /> <a href="${userLink}">${value}</a></span>`;
+            } else if (row.role === 'admin') {
+                return `<span style="white-space: nowrap" data-tooltip="true" title="${usernameRoleLinkFormatterTranslations.adminTooltip}"><x-icon type="superadmin" title="${usernameRoleLinkFormatterTranslations.adminTitle}" class="text-warning" /> <a href="${userLink}">${value}</a></span>`;
             }
 
+            // Regular user
+            return `<a href="${userLink}">${value}</a>`;
+        }
     }
 
     // Use this when we're introspecting into a column object and need to link
