@@ -210,7 +210,7 @@
                     $('#custom_fields_content').find('input,select,textarea').each(function (index,elem) {
                         if(transformed_oldvals[elem.name]) {
                             if (elem.type === 'checkbox' || elem.type === 'radio'){
-                                let shouldBeChecked = oldvals.find(oldValElement => {
+                                var shouldBeChecked = oldvals.find(function (oldValElement) {
                                     return oldValElement.name === elem.name && oldValElement.value === $(elem).val();
                                 });
 
@@ -301,7 +301,15 @@
 
             var auto_tag = $("#asset_tag").val().replace(/^{{ preg_quote(App\Models\Setting::getSettings()->auto_increment_prefix, '/') }}/g, '');
             var box_html        = '';
-			const zeroPad 		= (num, places) => String(num).padStart(places, '0');
+			function zeroPad(num, places) {
+			    var stringNum = String(num);
+			    if (stringNum.length >= places) {
+			        return stringNum;
+			    }
+
+			    var zerosNeeded = places - stringNum.length;
+			    return new Array(zerosNeeded + 1).join('0') + stringNum;
+			}
 
             // Check that we haven't exceeded the max number of asset fields
             if (x < max_fields) {
